@@ -1,43 +1,14 @@
 # Holograms
-A Bukkit plugin that allows easy creation and management of text based Holograms
-
-### Resources
-
-* [Resource Page](https://www.spigotmc.org/resources/holograms.4924/)
-
-### Building
-
-To successfully build Holograms using Maven, you must first run Spigot's BuildTools for several versions in order to compile.
-
-```
-java -jar BuildTools.jar --rev 1.16
-java -jar BuildTools.jar --rev 1.15.2
-java -jar BuildTools.jar --rev 1.14
-java -jar BuildTools.jar --rev 1.13.2
-java -jar BuildTools.jar --rev 1.13
-java -jar BuildTools.jar --rev 1.12
-java -jar BuildTools.jar --rev 1.11
-java -jar BuildTools.jar --rev 1.10
-java -jar BuildTools.jar --rev 1.9.4
-java -jar BuildTools.jar --rev 1.9
-java -jar BuildTools.jar --rev 1.8.8
-java -jar BuildTools.jar --rev 1.8.3
-java -jar BuildTools.jar --rev 1.8
-```
-
-Then use the following command to build using Maven
-```
-mvn clean install
-```
-
-The resulting jar files will be found in the /target folder for each module.
+A Minestom extension that allows easy creation and management of text based Holograms
 
 ### Using Holograms
 
-To use Holograms in your plugins, add the Holograms-API module to your build path. Then add Holograms as a dependency in your plugin.yml file:
+To use Holograms in your extensions, add the Holograms-API module to your build path. Then add Holograms as a dependency in your extension.json file:
 
-```yml
-depend: [Holograms]
+```extension.json
+"dependencies": [
+    "HologramsMinestom"
+  ]
 ```
 
 Hologram creation is made easy with our API. Get a reference to the HologramManager and you're set.
@@ -46,8 +17,9 @@ Hologram creation is made easy with our API. Get a reference to the HologramMana
 private HologramManager hologramManager;
 
 @Override
-public void onEnable() {
-    this.hologramManager = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();
+public void initialize() {
+    HologramPlugin extension = (HologramPlugin) MinecraftServer.getExtensionManager().getExtension("HologramsMinestom");
+    this.hologramManager = extension.getHologramManager()
 }
 ```
 
@@ -101,7 +73,6 @@ The subcommands for this plugin are as follows:
 * `/holograms addline <hologramName> <textToAdd>`
 * `/holograms create <hologramName> <initialText>`
 * `/holograms delete <hologramName>`
-* `/holograms import <plugin>`
 * `/holograms info <hologramName>`
 * `/holograms insertline <hologramName> <index> <textToAdd>`
 * `/holograms list`
