@@ -1,6 +1,6 @@
 package com.sainttx.holograms.api.line;
 
-import org.bukkit.inventory.ItemStack;
+import net.minestom.server.item.ItemStack;
 
 public interface ItemCarryingHologramLine extends HologramLine {
 

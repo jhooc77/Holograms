@@ -1,10 +1,11 @@
 package com.sainttx.holograms.api.line;
 
+import java.util.Iterator;
+
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.animation.Animation;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Iterator;
+import net.minestom.server.item.ItemStack;
 
 public class AnimatedItemLine extends ItemLine implements UpdatingHologramLine {
 

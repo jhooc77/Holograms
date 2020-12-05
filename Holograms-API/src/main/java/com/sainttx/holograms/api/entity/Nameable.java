@@ -1,5 +1,7 @@
 package com.sainttx.holograms.api.entity;
 
+import net.minestom.server.chat.ColoredText;
+
 public interface Nameable extends HologramEntity {
 
     /**
@@ -7,13 +9,13 @@ public interface Nameable extends HologramEntity {
      *
      * @param text the new text
      */
-    void setName(String text);
+    void setName(ColoredText text);
 
     /**
      * Returns the current display name for this entity.
      *
      * @return the current text.
      */
-    String getName();
+    ColoredText getName();
 
 }

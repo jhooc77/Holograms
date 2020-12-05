@@ -1,38 +1,44 @@
 package com.sainttx.holograms.api;
 
-import com.sainttx.holograms.api.line.HologramLine;
-import com.sainttx.holograms.api.line.ItemLine;
-import com.sainttx.holograms.api.line.UpdatingHologramLine;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.Validate;
+
+import com.sainttx.holograms.api.line.HologramLine;
+import com.sainttx.holograms.api.line.ItemLine;
+import com.sainttx.holograms.api.line.UpdatingHologramLine;
+
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 
 public class Hologram {
 
     private final HologramPlugin plugin;
     private final String id;
-    private Location location;
+    private Position location;
     private boolean persist;
     private boolean spawned;
     private List<HologramLine> lines = new ArrayList<>();
+    private Instance instance;
 
     @ConstructorProperties({ "id", "location" })
-    public Hologram(String id, Location location) {
-        this(id, location, false);
+    public Hologram(String id, Position location, Instance instance) {
+        this(id, location, false, instance);
     }
 
     @ConstructorProperties({ "id", "location", "persist" })
-    public Hologram(String id, Location location, boolean persist) {
+    public Hologram(String id, Position location2, boolean persist, Instance instance) {
         Validate.notNull(id, "Hologram id cannot be null");
-        Validate.notNull(location, "Hologram location cannot be null");
-        this.plugin = JavaPlugin.getPlugin(HologramPlugin.class);
+        Validate.notNull(location2, "Hologram location cannot be null");
+        Validate.notNull(instance, "Instance cannot be null");
+        this.plugin = (HologramPlugin) MinecraftServer.getExtensionManager().getExtension("HologramsMinestom");
         this.id = id;
-        this.location = location;
+        this.location = location2;
         this.persist = persist;
+        this.instance = instance;
     }
     
     // Internal method to save hologram if persistent state has been set
@@ -41,7 +47,9 @@ public class Hologram {
             plugin.getHologramManager().saveHologram(this);
         }
     }
-
+    public Instance getInstance() {
+    	return this.instance;
+    }
     /**
      * Returns the unique ID id of this Hologram.
      *
@@ -83,8 +91,8 @@ public class Hologram {
      *
      * @return the holograms location
      */
-    public Location getLocation() {
-        return this.location.clone();
+    public Position getLocation() {
+        return this.location.copy();
     }
 
     /**
@@ -154,26 +162,26 @@ public class Hologram {
      *
      * @return true if chunk is loaded, false otherwise
      */
-    public boolean isChunkLoaded() {
-        Location location = getLocation();
-        int chunkX = (int) Math.floor(location.getBlockX() / 16.0D);
-        int chunkZ = (int) Math.floor(location.getBlockZ() / 16.0D);
-        return location.getWorld().isChunkLoaded(chunkX, chunkZ);
+    public boolean isChunkLoaded(Instance instance) {
+        Position location = getLocation();
+        int chunkX = (int) Math.floor(location.toBlockPosition().getX() / 16.0D);
+        int chunkZ = (int) Math.floor(location.toBlockPosition().getZ() / 16.0D);
+        return instance.isChunkLoaded(chunkX, chunkZ);
     }
 
     // Reorganizes holograms after an initial index
     private void reorganize() {
-        Location location = getLocation();
-        double y = location.getY();
+        Position location = getLocation();
+        float y = location.getY();
         for (int i = 0 ; i < lines.size() ; i++) {
             HologramLine line = getLine(i);
             if (line instanceof ItemLine) {
                 y -= 0.2;
             }
-            Location lineLocation = new Location(location.getWorld(), location.getX(), y, location.getZ());
+            Position lineLocation = new Position(location.getX(), y, location.getZ());
             y -= line.getHeight();
             y -= HologramLine.SPACE_BETWEEN_LINES;
-            line.setLocation(lineLocation);
+            line.setLocation(lineLocation, instance);
         }
     }
 
@@ -192,7 +200,7 @@ public class Hologram {
         if (this.isSpawned()) {
             despawn();
         }
-        if (isChunkLoaded()) {
+        if (isChunkLoaded(instance)) {
             reorganize();
             getLines().forEach(HologramLine::show);
             this.spawned = true;
@@ -204,9 +212,19 @@ public class Hologram {
      *
      * @param location the location
      */
-    public void teleport(Location location) {
+    public void teleport(Position location) {
         if (!this.location.equals(location)) {
-            this.location = location.clone();
+            this.location = location.copy();
+            save();
+            if (isSpawned()) {
+                spawn();
+            }
+        }
+    }
+    public void teleport(Position location, Instance instance) {
+        if (!this.location.equals(location)) {
+            this.location = location.copy();
+            this.instance = instance;
             save();
             if (isSpawned()) {
                 spawn();

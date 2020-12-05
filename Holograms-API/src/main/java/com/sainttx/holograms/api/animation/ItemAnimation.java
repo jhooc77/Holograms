@@ -1,12 +1,14 @@
 package com.sainttx.holograms.api.animation;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.commons.lang3.Validate;
+
+import net.minestom.server.item.ItemStack;
 
 public class ItemAnimation implements Animation<ItemStack> {
 

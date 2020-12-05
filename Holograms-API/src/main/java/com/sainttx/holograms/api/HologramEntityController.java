@@ -4,19 +4,13 @@ import com.sainttx.holograms.api.entity.HologramEntity;
 import com.sainttx.holograms.api.entity.ItemHolder;
 import com.sainttx.holograms.api.entity.Nameable;
 import com.sainttx.holograms.api.line.HologramLine;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
+
+import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.Position;
 
 public interface HologramEntityController {
-
-    /**
-     * Returns the current Minecraft version implementation that this
-     * controller is handling.
-     *
-     * @return the minecraft version
-     */
-    MinecraftVersion getMinecraftVersion();
 
     /**
      * Spawns a new entity at a specific location for a HologramLine
@@ -26,7 +20,7 @@ public interface HologramEntityController {
      * @param location the location
      * @return the resulting entity that was spawned
      */
-    Nameable spawnNameable(HologramLine line, Location location);
+    Nameable spawnNameable(HologramLine line, Position location, Instance instance);
 
     /**
      * Spawns a new entity at a specific location for a HologramLine
@@ -38,7 +32,7 @@ public interface HologramEntityController {
      * @deprecated superseded by {@link #spawnItemHolder(HologramLine, Location, ItemStack)}
      */
     @Deprecated
-    ItemHolder spawnItemHolder(HologramLine line, Location location);
+    ItemHolder spawnItemHolder(HologramLine line, Position location, Instance instance);
 
     /**
      * Spawns a new entity at a specific location for a HologramLine
@@ -49,7 +43,7 @@ public interface HologramEntityController {
      * @param itemstack initial item
      * @return the resulting entity that was spawned
      */
-    ItemHolder spawnItemHolder(HologramLine line, Location location, ItemStack itemstack);
+    ItemHolder spawnItemHolder(HologramLine line, Position location, ItemStack itemstack, Instance instance);
 
     /**
      * Returns the {@link HologramEntity} of a hologram entity. If the

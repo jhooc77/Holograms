@@ -1,24 +1,25 @@
 package com.sainttx.holograms.api.line;
 
-import com.sainttx.holograms.api.Hologram;
-import com.sainttx.holograms.api.HologramPlugin;
-import com.sainttx.holograms.api.MinecraftVersion;
-import com.sainttx.holograms.api.entity.HologramEntity;
-import com.sainttx.holograms.api.entity.ItemHolder;
-import org.apache.commons.lang.Validate;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.Validate;
+
+import com.sainttx.holograms.api.Hologram;
+import com.sainttx.holograms.api.HologramPlugin;
+import com.sainttx.holograms.api.entity.ItemHolder;
+
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ColoredText;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.ItemMeta;
+import net.minestom.server.utils.Position;
 
 public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
 
@@ -34,10 +35,10 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
         this(parent, "item:" + itemstackToRaw(item), item);
     }
 
-    ItemLine(Hologram parent, String raw, ItemStack item) {
+    ItemLine(Hologram parent, String raw, ItemStack itemStack) {
         super(parent, raw);
-        Validate.notNull(item, "Item cannot be null");
-        this.item = item;
+        Validate.notNull(itemStack, "Item cannot be null");
+        this.item = itemStack;
     }
 
     // Parses an itemstack from text
@@ -56,9 +57,7 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
             durability = Short.parseShort(datasplit[1]);
         }
 
-        Material material = data.matches("[0-9]+")
-                ? Material.getMaterial(Integer.parseInt(data))
-                : Material.getMaterial(data.toUpperCase());
+        Material material = Material.valueOf(data.toUpperCase());
 
         // Throw exception if the material provided was wrong
         if (material == null) {
@@ -71,7 +70,7 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Invalid amount \"" + split[1] + "\"", ex);
         }
-        ItemStack item = new ItemStack(material, amount, (short) Math.max(0, durability));
+        ItemStack item = new ItemStack(material, (byte) amount, (short) Math.max(0, durability));
         ItemMeta meta = item.getItemMeta();
 
         // No meta data was provided, we can return here
@@ -88,31 +87,31 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
                 case "name":
                     // Replace '_' with spaces
                     String name = information[1].replace(' ', ' ');
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+                    item.setDisplayName(ColoredText.ofLegacy(name, '&'));
                     break;
                 case "lore":
                     // If lore was specified 2x for some reason, don't overwrite
-                    List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+                    ArrayList<ColoredText> lore = item.hasLore() ? item.getLore() : new ArrayList<>();
                     String[] loreLines = information[1].split("\\|");
 
                     // Format all the lines and add them as lore
                     for (String line : loreLines) {
                         line = line.replace('_', ' '); // Replace '_' with space
-                        lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                        lore.add(ColoredText.ofLegacy(line, '&'));
                     }
 
-                    meta.setLore(lore);
+                    item.setLore(lore);
                     break;
                 case "data":
                     short dataValue = Short.parseShort(information[1]);
-                    item.setDurability(dataValue);
+                    item.setDamage(dataValue);
                 default:
                     // Try parsing enchantment if it was nothing else
-                    Enchantment ench = Enchantment.getByName(information[0].toUpperCase());
+                    Enchantment ench = Enchantment.valueOf(information[0].toUpperCase());
                     int level = Integer.parseInt(information[1]);
 
                     if (ench != null) {
-                        meta.addEnchant(ench, level, true);
+                        item.setEnchantment(ench, (short) level);
                     } else {
                         throw new IllegalArgumentException("Invalid enchantment " + information[0]);
                     }
@@ -127,42 +126,38 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
     // Converts an ItemStack to raw representation
     static String itemstackToRaw(ItemStack itemstack) {
         StringBuilder sb = new StringBuilder();
-        sb.append(itemstack.getType().toString()); // append type
-        sb.append(':').append(itemstack.getDurability()); // append durability
+        sb.append(itemstack.getMaterial().toString()); // append type
+        sb.append(':').append(itemstack.getDamage()); // append durability
         sb.append(' ').append(itemstack.getAmount()); // append amount
 
-        if (itemstack.hasItemMeta()) {
-            ItemMeta meta = itemstack.getItemMeta();
+        // append name
+        if (itemstack.hasDisplayName()) {
+            sb.append(' ').append("name:").append(itemstack.getDisplayName().getMessage().replace(' ', '_'));
+        }
 
-            // append name
-            if (meta.hasDisplayName()) {
-                sb.append(' ').append("name:").append(meta.getDisplayName().replace(' ', '_'));
-            }
-
-            // append lore
-            if (meta.hasLore()) {
-                sb.append(' ').append("lore:");
-                Iterator<String> iterator = meta.getLore().iterator();
-                while (iterator.hasNext()) {
-                    sb.append(iterator.next().replace(' ', '_'));
-                    if (iterator.hasNext()) {
-                        sb.append('|');
-                    }
+        // append lore
+        if (itemstack.hasLore()) {
+            sb.append(' ').append("lore:");
+            Iterator<String> iterator = itemstack.getLore().stream().map(text -> text.getMessage()).collect(Collectors.toList()).iterator();
+            while (iterator.hasNext()) {
+                sb.append(iterator.next().replace(' ', '_'));
+                if (iterator.hasNext()) {
+                    sb.append('|');
                 }
             }
+        }
 
             // append enchantments
-            meta.getEnchants().forEach((ench, level) -> {
-                sb.append(' ').append(ench.getName()).append(':').append(level);
+            itemstack.getEnchantmentMap().forEach((ench, level) -> {
+                sb.append(' ').append(ench.toString()).append(':').append(level);
             });
-        }
 
         return sb.toString();
     }
 
     @Override
-    public void setLocation(Location location) {
-        super.setLocation(location);
+    public void setLocation(Position location, Instance instance) {
+        super.setLocation(location, instance);
         if (entity != null) {
             entity.setPosition(location.getX(), location.getY(), location.getZ());
         }
@@ -180,8 +175,8 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
     @Override
     public boolean show() {
         if (isHidden()) {
-            HologramPlugin plugin = JavaPlugin.getPlugin(HologramPlugin.class);
-            entity = plugin.getEntityController().spawnItemHolder(this, getLocation(), item);
+            HologramPlugin plugin = (HologramPlugin) MinecraftServer.getExtensionManager().getExtension("HologramsMinestom");
+            entity = plugin.getEntityController().spawnItemHolder(this, getLocation(), item, getInstance());
         }
         return true;
     }
@@ -193,21 +188,17 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
 
     @Override
     public ItemStack getItem() {
-        return item.clone();
+        return item.copy();
     }
 
     @Override
     public void setItem(ItemStack item) {
-        this.item = item.clone();
+        this.item = item.copy();
         entity.setItem(this.item);
     }
 
     @Override
     public double getHeight() {
-        HologramPlugin plugin = JavaPlugin.getPlugin(HologramPlugin.class);
-        if (plugin.getEntityController().getMinecraftVersion() == MinecraftVersion.V1_8_R1) {
-            return 1.60;
-        }
         return 0.5;
     }
 }

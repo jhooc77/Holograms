@@ -1,14 +1,18 @@
 package com.sainttx.holograms.api.line;
 
+import org.apache.commons.lang3.Validate;
+
 import com.sainttx.holograms.api.Hologram;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Location;
+
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 
 public abstract class AbstractLine implements HologramLine {
 
     private Hologram parent;
-    private Location location;
+    private Position location;
     private String raw;
+    private Instance instance;
 
     public AbstractLine(Hologram parent, String raw) {
         Validate.notNull(parent, "Parent hologram cannot be null");
@@ -16,6 +20,7 @@ public abstract class AbstractLine implements HologramLine {
         this.parent = parent;
         this.raw = raw;
         this.location = parent.getLocation();
+        this.setInstance(parent.getInstance());
     }
     
     protected void setRaw(String raw) {
@@ -24,13 +29,14 @@ public abstract class AbstractLine implements HologramLine {
     }
 
     @Override
-    public void setLocation(Location location) {
-        this.location = location.clone();
+    public void setLocation(Position location, Instance instance) {
+        this.location = location.copy();
+        this.instance = instance;
     }
 
     @Override
-    public Location getLocation() {
-        return location.clone();
+    public Position getLocation() {
+        return location.copy();
     }
 
     @Override
@@ -47,4 +53,14 @@ public abstract class AbstractLine implements HologramLine {
     public final String getRaw() {
         return raw;
     }
+    
+	@Override
+	public Instance getInstance() {
+		return instance;
+	}
+    
+    @Override
+	public void setInstance(Instance instance) {
+		this.instance = instance;
+	}
 }

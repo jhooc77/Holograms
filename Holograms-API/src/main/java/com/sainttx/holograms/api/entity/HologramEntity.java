@@ -1,7 +1,8 @@
 package com.sainttx.holograms.api.entity;
 
 import com.sainttx.holograms.api.line.HologramLine;
-import org.bukkit.entity.Entity;
+
+import net.minestom.server.entity.Entity;
 
 public interface HologramEntity {
 
@@ -31,5 +32,5 @@ public interface HologramEntity {
      * @param y y coordinate
      * @param z z coordinate
      */
-    void setPosition(double x, double y, double z);
+    void setPosition(float x, float y, float z);
 }

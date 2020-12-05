@@ -3,6 +3,8 @@ package com.sainttx.holograms.api.line;
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.animation.Animation;
 
+import net.minestom.server.chat.ColoredText;
+
 import java.util.Iterator;
 
 public class AnimatedTextLine extends TextLine implements UpdatingHologramLine {
@@ -36,7 +38,7 @@ public class AnimatedTextLine extends TextLine implements UpdatingHologramLine {
 
     @Override
     public void update() {
-        setText(animation.nextSlide());
+        setText(ColoredText.of(animation.nextSlide()));
         lastUpdate = System.currentTimeMillis();
     }
 

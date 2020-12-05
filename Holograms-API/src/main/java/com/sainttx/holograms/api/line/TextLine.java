@@ -3,13 +3,15 @@ package com.sainttx.holograms.api.line;
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.HologramPlugin;
 import com.sainttx.holograms.api.entity.Nameable;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
+
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ColoredText;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 
 public class TextLine extends AbstractLine implements TextualHologramLine {
 
-    private String text;
+    private ColoredText text;
     private Nameable nameable;
 
     public TextLine(Hologram parent, String text) {
@@ -18,12 +20,12 @@ public class TextLine extends AbstractLine implements TextualHologramLine {
 
     TextLine(Hologram parent, String raw, String text) {
         super(parent, raw);
-        this.text = ChatColor.translateAlternateColorCodes('&', text);
+        this.text = ColoredText.ofLegacy(text, '&');
     }
 
     @Override
-    public void setLocation(Location location) {
-        super.setLocation(location);
+    public void setLocation(Position location, Instance instance) {
+        super.setLocation(location, instance);
         if (!isHidden()) {
             nameable.getBukkitEntity().teleport(getLocation());
         }
@@ -40,8 +42,8 @@ public class TextLine extends AbstractLine implements TextualHologramLine {
     @Override
     public boolean show() {
         if (isHidden()) {
-            HologramPlugin plugin = JavaPlugin.getPlugin(HologramPlugin.class);
-            nameable = plugin.getEntityController().spawnNameable(this, getLocation());
+            HologramPlugin plugin = (HologramPlugin) MinecraftServer.getExtensionManager().getExtension("HologramsMinestom");
+            nameable = plugin.getEntityController().spawnNameable(this, getLocation(), getInstance());
             nameable.setName(text);
         }
         return true;
@@ -53,14 +55,14 @@ public class TextLine extends AbstractLine implements TextualHologramLine {
     }
 
     @Override
-    public String getText() {
+    public ColoredText getText() {
         return this.text;
     }
 
     @Override
-    public void setText(String text) {
+    public void setText(ColoredText text) {
         this.text = text;
-        setRaw(text);
+        setRaw(text.getMessage());
         nameable.setName(text);
     }
 

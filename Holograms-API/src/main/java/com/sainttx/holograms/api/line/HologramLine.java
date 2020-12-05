@@ -1,7 +1,9 @@
 package com.sainttx.holograms.api.line;
 
 import com.sainttx.holograms.api.Hologram;
-import org.bukkit.Location;
+
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 
 public interface HologramLine {
 
@@ -40,15 +42,17 @@ public interface HologramLine {
      * Sets the location that this line should be displayed at.
      *
      * @param location the location
+     * @param instance 
      */
-    void setLocation(Location location);
+    void setLocation(Position location, Instance instance);
 
     /**
      * Gets the current location where this line is displayed at.
      *
      * @return the location
-     */
-    Location getLocation();
+ @Override
+	    */
+    Position getLocation();
 
     /**
      * Hides this line from being displayed by the hologram.
@@ -94,4 +98,8 @@ public interface HologramLine {
      * @return the text representation
      */
     String getRaw();
+
+	void setInstance(Instance instance);
+
+	Instance getInstance();
 }
