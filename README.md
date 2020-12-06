@@ -28,7 +28,7 @@ public void initialize() {
 Once you have the manager reference, you can easily work your way around the APIs offerings:
 
 ```java
-public void createHologram(String id, Location location) {
+public void createHologram(String id, Position location, Instance instance) {
     Hologram hologram = new Hologram(id, location);
     hologramManager.addActiveHologram(hologram); // Tells the plugin a new Hologram was added
 }
