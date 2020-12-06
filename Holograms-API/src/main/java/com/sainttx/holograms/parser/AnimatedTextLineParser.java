@@ -1,13 +1,12 @@
 package com.sainttx.holograms.parser;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.animation.TextAnimation;
 import com.sainttx.holograms.api.line.AnimatedTextLine;
 import com.sainttx.holograms.api.line.HologramLine;
-
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AnimatedTextLineParser implements AnimatedTextLine.Parser {
 

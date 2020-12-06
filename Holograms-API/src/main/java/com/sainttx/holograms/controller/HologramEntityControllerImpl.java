@@ -25,8 +25,8 @@ public class HologramEntityControllerImpl implements HologramEntityController {
 	public EntityNameable spawnNameable(HologramLine line, Position location, Instance instance) {
         EntityNameable armorStand = new EntityNameable(location, instance, line);
         armorStand.setPosition(location.getX(), location.getY(), location.getZ());
-        if (!addEntityToWorld(instance, armorStand)) {
-            plugin.getLogger().info("Failed to spawn hologram entity in instance " + instance.getUniqueId()
+        if (!addEntityToWorld(instance, armorStand.getBukkitEntity())) {
+            plugin.getLogger().info("Failed to spawn hologram entity in instance " + instance.getStorageLocation().getLocation()
                     + " at x:" + location.getX() + " y:" + location.getY() + " z:" + location.getZ());
         }
         return armorStand;
@@ -42,7 +42,7 @@ public class HologramEntityControllerImpl implements HologramEntityController {
     public ItemHolder spawnItemHolder(HologramLine line, Position location, ItemStack itemstack, Instance instance) {
         EntityItemHolder item = new EntityItemHolder(location, instance, line, itemstack);
         if (!addEntityToWorld(instance, item)) {
-            plugin.getLogger().info("Failed to spawn item entity in instance " + instance.getUniqueId()
+            plugin.getLogger().info("Failed to spawn item entity in instance " + instance.getStorageLocation().getLocation()
                     + " at x:" + location.getX() + " y:" + location.getY() + " z:" + location.getZ());
         }
         EntityNameable armorStand = spawnNameable(line, location, instance);

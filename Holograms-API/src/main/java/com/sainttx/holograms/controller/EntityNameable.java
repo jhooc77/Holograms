@@ -5,43 +5,33 @@ import com.sainttx.holograms.api.line.HologramLine;
 
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.type.decoration.EntityArmorStand;
+import net.minestom.server.entity.hologram.Hologram;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 
-public class EntityNameable extends EntityArmorStand implements Nameable {
+public class EntityNameable extends Hologram implements Nameable {
 
     private HologramLine parentPiece;
 
     public EntityNameable(Position location, Instance instance, HologramLine parentPiece) {
-        super(location);
-        setInvisible(true);
-        setSmall(true);
-        setHasArms(true);
-        setNoGravity(true);
-        setNoBasePlate(false);
-        setMarker(true);
-        setInstance(instance);
+        super(instance, location, null, true);
         this.parentPiece = parentPiece;
     }
 
     @Override
     public void setName(ColoredText text) {
     	if (text!=null)
-        super.setCustomName(text);
-        super.setCustomNameVisible(text!=null);
+        super.setText(text);
     }
 
     @Override
     public ColoredText getName() {
-        return super.getCustomName();
+        return super.getText();
     }
 
     @Override
     public void setPosition(float x, float y, float z) {
-        super.getPosition().setX(x);
-        super.getPosition().setY(y);
-        super.getPosition().setZ(z);
+        super.setPosition(new Position(x, y, z));
     }
 
     @Override
@@ -54,13 +44,8 @@ public class EntityNameable extends EntityArmorStand implements Nameable {
         super.remove();
     }
 
-    @Override
-    public void setInvisible(boolean flag) {
-        super.setInvisible(true);
-    }
-
 	@Override
 	public Entity getBukkitEntity() {
-		return this;
+		return this.getEntity();
 	}
 }

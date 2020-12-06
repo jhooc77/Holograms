@@ -1,7 +1,5 @@
 package com.sainttx.holograms.util;
 
-import java.util.UUID;
-
 import org.apache.commons.lang3.Validate;
 
 import com.extollit.tuple.Pair;
@@ -19,7 +17,7 @@ public class LocationUtil {
      * @return A string representation of the Location
      */
     public static String locationAsString(Position location, Instance instance) {
-        return instance.getUniqueId() + ";" + location.getX() + ";" + location.getY()
+        return instance.getStorageLocation().getLocation() + ";" + location.getX() + ";" + location.getY()
                 + ";" + location.getZ() + ";" + location.getPitch() + ";" + location.getYaw();
     }
 
@@ -36,7 +34,7 @@ public class LocationUtil {
         if (parts.length >= 4) { // At least world, x, y, z specified
             Instance world = null;
             for (Instance i : MinecraftServer.getInstanceManager().getInstances()){
-            	if (i.getUniqueId().equals(UUID.fromString(parts[0]))) {
+            	if (i.getStorageLocation().getLocation().equals(parts[0])) {
             		world = i;
             	}
             }

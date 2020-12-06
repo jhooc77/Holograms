@@ -5,7 +5,12 @@ package com.sainttx.holograms.api.exception;
  */
 public class HologramEntitySpawnException extends RuntimeException {
 
-    public HologramEntitySpawnException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1895850132308845796L;
+
+	public HologramEntitySpawnException() {
     }
 
     public HologramEntitySpawnException(String message) {

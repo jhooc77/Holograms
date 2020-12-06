@@ -30,7 +30,7 @@ public class TextUtil {
      * @return A string representation of the Location
      */
     public static String locationAsString(Position location, Instance instance) {
-        return instance.getUniqueId() + " (x/y/z: " + formatDouble(location.getX()) + "/" + formatDouble(location.getY())
+        return instance.getStorageLocation().getLocation() + " (x/y/z: " + formatDouble(location.getX()) + "/" + formatDouble(location.getY())
                 + "/" + formatDouble(location.getZ()) + ")";
     }
 
