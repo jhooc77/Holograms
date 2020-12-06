@@ -43,8 +43,8 @@ public class CommandRemoveLine implements CommandProcessor {
                     HologramLine line = hologram.getLine(index);
                     hologram.removeLine(line);
                     if (line instanceof TextualHologramLine) {
-                        sender.sendMessage(ChatColor.BRIGHT_GREEN + "Removed line " + ((TextualHologramLine) line).getText().getMessage()
-                                + " from hologram " + hologram.getId());
+                        sender.sendMessage(ChatColor.BRIGHT_GREEN + "Removed line \"" + ((TextualHologramLine) line).getText().getMessage()
+                                + ChatColor.BRIGHT_GREEN + "\" from hologram " + hologram.getId());
                     } else {
                         sender.sendMessage(ChatColor.BRIGHT_GREEN + "Removed line at position " + index
                                 + " from hologram " + hologram.getId());

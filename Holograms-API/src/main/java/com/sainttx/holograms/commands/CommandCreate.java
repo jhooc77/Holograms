@@ -45,7 +45,7 @@ public class CommandCreate implements CommandProcessor {
                 holo.spawn();
                 plugin.getHologramManager().addActiveHologram(holo);
                 plugin.getHologramManager().saveHologram(holo);
-                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Created hologram " + holo.getId() + " with line \"" + text.getMessage() + "\"");
+                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Created hologram " + holo.getId() + " with line \"" + text.getMessage() + ChatColor.BRIGHT_GREEN + "\"");
             }
         }
 

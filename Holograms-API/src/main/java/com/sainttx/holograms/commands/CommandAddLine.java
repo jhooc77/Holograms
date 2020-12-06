@@ -39,7 +39,7 @@ public class CommandAddLine implements CommandProcessor {
                     sender.sendMessage(ChatColor.RED + "Error: " + ex.getMessage());
                     return true;
                 }
-                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Added line \"" + text.getMessage() + "\" to hologram " + hologram.getId());
+                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Added line \"" + text.getMessage() + ChatColor.BRIGHT_GREEN + "\" to hologram " + hologram.getId());
             }
         }
 

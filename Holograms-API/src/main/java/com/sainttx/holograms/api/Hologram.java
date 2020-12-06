@@ -139,6 +139,9 @@ public class Hologram {
     public void removeLine(HologramLine line) {
         lines.remove(line);
         save();
+        if (this.spawned) {
+            spawn();
+        }
         line.hide();
         if (line instanceof UpdatingHologramLine) { // Remove tracked line
             plugin.getHologramManager().untrackLine(((UpdatingHologramLine) line));

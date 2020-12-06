@@ -53,7 +53,7 @@ public class CommandInsertLine implements CommandProcessor {
                         sender.sendMessage(ChatColor.RED + "Error: " + ex.getMessage());
                         return true;
                     }
-                    sender.sendMessage(ChatColor.BRIGHT_GREEN + "Inserted line \"" + text + "\" into hologram "
+                    sender.sendMessage(ChatColor.BRIGHT_GREEN + "Inserted line \"" + text.getMessage() + ChatColor.BRIGHT_GREEN + "\" into hologram "
                             + hologram.getId() + " at index " + index);
                 }
             }
