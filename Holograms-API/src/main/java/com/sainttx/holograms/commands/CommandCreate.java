@@ -2,10 +2,7 @@ package com.sainttx.holograms.commands;
 
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.HologramPlugin;
-import com.sainttx.holograms.api.animation.TextAnimation;
-import com.sainttx.holograms.api.line.AnimatedTextLine;
 import com.sainttx.holograms.api.line.HologramLine;
-import com.sainttx.holograms.api.line.ItemLine;
 import com.sainttx.holograms.util.TextUtil;
 
 import net.minestom.server.chat.ChatColor;
@@ -13,8 +10,6 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 
 public class CommandCreate implements CommandProcessor {
 
@@ -51,10 +46,6 @@ public class CommandCreate implements CommandProcessor {
                 plugin.getHologramManager().addActiveHologram(holo);
                 plugin.getHologramManager().saveHologram(holo);
                 sender.sendMessage(ChatColor.BRIGHT_GREEN + "Created hologram " + holo.getId() + " with line \"" + text.getMessage() + ChatColor.BRIGHT_GREEN + "\"");
-
-                sender.sendMessage("굿굿");
-                holo.addLine(new ItemLine(holo, new ItemStack(Material.GOLD_INGOT, (byte) 1)));
-    			holo.addLine(new AnimatedTextLine(holo, new TextAnimation("프리", "안녕"), 5L));
             }
         }
 
