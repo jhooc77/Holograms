@@ -35,6 +35,7 @@ public class HologramCommands implements CommandProcessor {
         commands.put("info", new CommandInfo(plugin));
         commands.put("insertline", new CommandInsertLine(plugin));
         commands.put("list", new CommandList(plugin));
+        commands.put("move", new CommandMove(plugin));
         commands.put("movehere", new CommandMoveHere(plugin));
         commands.put("near", new CommandNear(plugin));
         commands.put("removeline", new CommandRemoveLine(plugin));
@@ -74,7 +75,8 @@ public class HologramCommands implements CommandProcessor {
         sender.sendMessage(ChatColor.YELLOW + "/holograms info " + ChatColor.WHITE + "<name> <text>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms insertline " + ChatColor.WHITE + "<name> <index> <text>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms list");
-        sender.sendMessage(ChatColor.YELLOW + "/holograms move " + ChatColor.WHITE + "<name> <world> <x> <y> <z>");
+        sender.sendMessage(ChatColor.YELLOW + "/holograms move " + ChatColor.WHITE + "<name> <instance> <x> <y> <z>");
+        sender.sendMessage(ChatColor.YELLOW + "/holograms move " + ChatColor.WHITE + "<name> <x> <y> <z>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms movehere " + ChatColor.WHITE + "<name>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms near " + ChatColor.WHITE + "<radius>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms removeline " + ChatColor.WHITE + "<name> <index>");

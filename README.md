@@ -76,6 +76,8 @@ The subcommands for this plugin are as follows:
 * `/holograms info <hologramName>`
 * `/holograms insertline <hologramName> <index> <textToAdd>`
 * `/holograms list`
+* `/holograms move <hologramName> <instance> <x> <y> <z>`
+* `/holograms move <hologramName> <x> <y> <z>`
 * `/holograms movehere <hologramName>`
 * `/holograms near <radius>`
 * `/holograms removeline <hologramName> <index>`
