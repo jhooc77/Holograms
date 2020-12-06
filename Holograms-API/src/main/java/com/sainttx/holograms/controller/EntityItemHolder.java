@@ -6,6 +6,7 @@ import com.sainttx.holograms.api.line.HologramLine;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.hologram.Hologram;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Position;
@@ -19,6 +20,8 @@ public class EntityItemHolder extends ItemEntity implements ItemHolder {
         super(itemstack, location, instance);
         this.line = line;
         this.itemstack = itemstack;
+        this.setNoGravity(true);
+        this.setPickable(false);
     }
 
     @Override
@@ -58,8 +61,9 @@ public class EntityItemHolder extends ItemEntity implements ItemHolder {
 
     @Override
     public void setMount(HologramEntity entity) {
-        if (entity instanceof Entity) {
-        	((Entity) entity).addPassenger(this);
+        if (entity instanceof Hologram) {
+        	Hologram holo = (Hologram) entity;
+        	((Entity)holo.getEntity()).addPassenger(this);
         }
     }
 

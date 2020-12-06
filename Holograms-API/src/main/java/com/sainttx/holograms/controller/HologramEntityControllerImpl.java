@@ -45,8 +45,9 @@ public class HologramEntityControllerImpl implements HologramEntityController {
             plugin.getLogger().info("Failed to spawn item entity in instance " + instance.getStorageLocation().getLocation()
                     + " at x:" + location.getX() + " y:" + location.getY() + " z:" + location.getZ());
         }
-        EntityNameable armorStand = spawnNameable(line, location, instance);
+        EntityNameable armorStand = spawnNameable(line, location.copy().add(0, 0.2f, 0), instance);
         item.setMount(armorStand);
+        armorStand.getBukkitEntity().setCustomNameVisible(false);
         return item;
     }
 
