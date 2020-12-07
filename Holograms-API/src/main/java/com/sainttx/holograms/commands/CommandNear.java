@@ -57,7 +57,7 @@ public class CommandNear implements CommandProcessor {
                 sender.sendMessage(ChatColor.BRIGHT_GREEN + "Holograms within " + radius + " blocks:");
                 for (Map.Entry<Hologram, Float> near : nearby.entrySet()) {
                     Hologram holo = near.getKey();
-                    sender.sendMessage(" - \"" + holo.getId() + "\" at " + TextUtil.locationAsString(holo.getLocation(), holo.getInstance()) + " (" + TextUtil.formatDouble(near.getValue()) + " blocks away)" + (!holo.isSpawned()?" §7§o(Hidden)":""));
+                    sender.sendMessage(" - \"" + holo.getId() + "\" at " + TextUtil.locationAsString(holo.getLocation(), holo.getInstance()) + " (" + TextUtil.formatDouble(near.getValue()) + " blocks away)" + (holo.isHidden()?" §7§o(Hidden)":""));
                 }
             }
         }

@@ -62,7 +62,7 @@ Or if you want to hide a persistent hologram:
 
 ```java
 public void hideHologram(Hologram hologram) {
-    hologram.despawn();
+    hologram.hide();
 }
 ```
 
@@ -70,7 +70,7 @@ And you can show hologram again:
 
 ```java
 public void showHologram(Hologram hologram) {
-    hologram.spawn();
+    hologram.reveal();
 }
 ```
 
@@ -89,6 +89,7 @@ The subcommands for this plugin are as follows:
 * `/holograms near <radius>`
 * `/holograms removeline <hologramName> <index>`
 * `/holograms refresh`
+* `/holograms setline <hologramName> <index> <text>`
 * `/holograms teleport <hologramName>`
 * `/holograms hide <hologramName>`
 

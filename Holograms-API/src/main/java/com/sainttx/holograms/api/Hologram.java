@@ -21,6 +21,7 @@ public class Hologram {
     private Position location;
     private boolean persist;
     private boolean spawned;
+    private boolean hidden;
     private List<HologramLine> lines = new ArrayList<>();
     private Instance instance;
 
@@ -39,6 +40,7 @@ public class Hologram {
         this.location = location2;
         this.persist = persist;
         this.instance = instance;
+        this.hidden = false;
     }
     
     // Internal method to save hologram if persistent state has been set
@@ -233,5 +235,19 @@ public class Hologram {
                 spawn();
             }
         }
+    }
+    public void hide() {
+        this.hidden = true;
+        despawn();
+        save();
+    }
+
+    public void reveal() {
+    	this.hidden = false;
+    	spawn();
+        save();
+    }
+    public boolean isHidden() {
+    	return this.hidden;
     }
 }

@@ -39,12 +39,12 @@ public class CommandHide implements CommandProcessor {
             if (hologram == null) {
                 sender.sendMessage(ChatColor.RED + "Hologram " + hologramName + " does not exist");
             } else {
-            	if (hologram.isSpawned()) {
+            	if (!hologram.isHidden()) {
             		sender.sendMessage(ChatColor.BRIGHT_GREEN + "Hide hologram " + hologram.getId());
-            		hologram.despawn();
+            		hologram.hide();
             	} else {
             		sender.sendMessage(ChatColor.BRIGHT_GREEN + "Reveal hologram " + hologram.getId());
-            		hologram.spawn();
+            		hologram.reveal();
             	}
             }
         }

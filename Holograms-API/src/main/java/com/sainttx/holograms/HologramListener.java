@@ -56,12 +56,15 @@ public class HologramListener {
 	            return;
 	        }
 
-	        Collection<Hologram> holograms = extension.getHologramManager().getActiveHolograms().values();
+	        Collection<Hologram> holograms = extension.getHologramManager().getHolograms().values();
 	        for (Hologram holo : holograms) {
 	            int chunkX = (int) Math.floor(holo.getLocation().toBlockPosition().getX() / 16.0D);
 	            int chunkZ = (int) Math.floor(holo.getLocation().toBlockPosition().getZ() / 16.0D);
 	            if (chunkX == chunk.getChunkX() && chunkZ == chunk.getChunkZ()) {
-	            	MinecraftServer.getSchedulerManager().buildTask(holo::spawn).delay(10, TimeUnit.TICK).schedule();
+	            	MinecraftServer.getSchedulerManager().buildTask(() -> {
+	            		if (!holo.isHidden())
+	            		holo.spawn();
+	            	}).delay(10, TimeUnit.TICK).schedule();
 	            }
 	        }
 

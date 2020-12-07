@@ -68,10 +68,13 @@ public class ManagerImpl implements HologramManager {
                     plugin.getLogger().info("Hologram \"" + hologramName + "\" has an invalid location");
                     continue;
                 }
-
                 Instance instance = locationd.right;
 				// Create the Hologram
-                Hologram hologram = new Hologram(hologramName, location, true, instance );
+                Hologram hologram = new Hologram(hologramName, location, true, instance);
+                if (storageLocation.get("holograms." + hologramName + ".hide", Boolean.class)) {
+                	hologram.hide();
+                	i++;
+                }
                 // Add the lines
                 for (String string : uncoloredLines) {
                     HologramLine line = plugin.parseLine(hologram, string);
@@ -82,12 +85,14 @@ public class ManagerImpl implements HologramManager {
                         continue loadHolograms;
                     }
                 }
-                hologram.spawn();
+                if (!hologram.isHidden()) {
+                	hologram.spawn();
+                }
                 addHologram(hologram);
             }
         	plugin.getLogger().info("Loaded \"" + Holograms.size() + "\" holograms with \"" + i + "\" inactive holograms");
         } else {
-            plugin.getLogger().info("holograms.yml file had no 'holograms' section defined, no holograms loaded");
+            plugin.getLogger().info("holograms storage file doesn't exist, no holograms loaded");
         }
     }
 
@@ -100,6 +105,7 @@ public class ManagerImpl implements HologramManager {
                 .collect(Collectors.toList());
         storageLocation.set("holograms." + hologramName + ".location", LocationUtil.locationAsString(hologram.getLocation(), hologram.getInstance()), String.class);
         storageLocation.set("holograms." + hologramName + ".lines", uncoloredLines.toArray(new String[uncoloredLines.size()]), String[].class);
+        storageLocation.set("holograms." + hologramName + ".hide", hologram.isHidden(), Boolean.class);
         storageLocation.set("holograms", Holograms.keySet().toArray(new String[Holograms.size()]), String[].class);
     }
 
@@ -109,6 +115,7 @@ public class ManagerImpl implements HologramManager {
         Holograms.remove(hologram.getId());
         storageLocation.delete("holograms." + hologram.getId() + ".location");
         storageLocation.delete("holograms." + hologram.getId() + ".lines");
+        storageLocation.delete("holograms." + hologram.getId() + ".hide");
         storageLocation.set("holograms", Holograms.keySet().toArray(new String[Holograms.size()]), String[].class);
     }
 
@@ -121,7 +128,7 @@ public class ManagerImpl implements HologramManager {
     public Map<String, Hologram> getActiveHolograms() {
     	Map<String, Hologram> activeHolograms = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     	Holograms.forEach((t, h) -> {
-    		if (h.isSpawned()) activeHolograms.put(t, h);
+    		if (!h.isHidden()) activeHolograms.put(t, h);
     	});
         return activeHolograms;
     }
@@ -148,8 +155,8 @@ public class ManagerImpl implements HologramManager {
 
     @Override
     public void clear() {
-        getActiveHolograms().values().forEach(Hologram::despawn);
-        getActiveHolograms().clear();
+        getHolograms().values().forEach(Hologram::despawn);
+        getHolograms().clear();
     }
 
 	@Override
