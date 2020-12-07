@@ -24,9 +24,9 @@ public class CommandList implements CommandProcessor {
         HologramManager manager = plugin.getHologramManager();
 
         sender.sendMessage(ChatColor.BRIGHT_GREEN + "All holograms:");
-        for (Hologram hologram : manager.getActiveHolograms().values()) {
+        for (Hologram hologram : manager.getHolograms().values()) {
             int lines = hologram.getLines().size();
-            sender.sendMessage(" - \"" + hologram.getId() + "\" at " + TextUtil.locationAsString(hologram.getLocation(), hologram.getInstance()) + " (" + lines + " lines)");
+            sender.sendMessage(" - \"" + hologram.getId() + "\" at " + TextUtil.locationAsString(hologram.getLocation(), hologram.getInstance()) + " (" + lines + " lines)" + (!hologram.isSpawned()?" §7§o(Hidden)":""));
         }
         return true;
     }

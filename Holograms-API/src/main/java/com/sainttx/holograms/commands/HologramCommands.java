@@ -44,6 +44,7 @@ public class HologramCommands implements CommandProcessor {
         CommandTeleport teleportCommand = new CommandTeleport(plugin);
         commands.put("teleport", teleportCommand);
         commands.put("tp", teleportCommand);
+        commands.put("hide", new CommandHide(plugin));
     }
 
     @Override
@@ -83,6 +84,7 @@ public class HologramCommands implements CommandProcessor {
         sender.sendMessage(ChatColor.YELLOW + "/holograms reload");
         sender.sendMessage(ChatColor.YELLOW + "/holograms setline " + ChatColor.WHITE + "<name> <index> <text>");
         sender.sendMessage(ChatColor.YELLOW + "/holograms teleport " + ChatColor.WHITE + "<name>");
+        sender.sendMessage(ChatColor.YELLOW + "/holograms hide " + ChatColor.WHITE + "<name>");
     }
 
 	@Override

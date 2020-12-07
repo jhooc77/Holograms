@@ -31,7 +31,7 @@ public class CommandInfo implements CommandProcessor {
             if (hologram == null) {
                 sender.sendMessage(ChatColor.RED + "Hologram " + hologramName + " does not exist");
             } else {
-                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Hologram \"" + hologram.getId() + "\"");
+                sender.sendMessage(ChatColor.BRIGHT_GREEN + "Hologram \"" + hologram.getId() + "\"" + (!hologram.isSpawned()?" §7§o(Hidden)":""));
                 Collection<HologramLine> lines = hologram.getLines();
                 sender.sendMessage(ChatColor.GRAY + "Location: " + ChatColor.WHITE + TextUtil.locationAsString(hologram.getLocation(), hologram.getInstance()));
                 if (lines.isEmpty()) {

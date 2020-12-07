@@ -89,7 +89,8 @@ The subcommands for this plugin are as follows:
 * `/holograms near <radius>`
 * `/holograms removeline <hologramName> <index>`
 * `/holograms refresh`
-* `/holograms setline <hologramName> <index> <text>`
+* `/holograms teleport <hologramName>`
+* `/holograms hide <hologramName>`
 
 
 ## License ##

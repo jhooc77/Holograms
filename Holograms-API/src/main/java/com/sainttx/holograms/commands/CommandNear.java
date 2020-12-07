@@ -42,7 +42,7 @@ public class CommandNear implements CommandProcessor {
             Player player = (Player) sender;
             HologramManager manager = plugin.getHologramManager();
             Map<Hologram, Float> nearby = new HashMap<>();
-            for (Hologram hologram : manager.getActiveHolograms().values()) {
+            for (Hologram hologram : manager.getHolograms().values()) {
                 if (hologram.getInstance().equals(player.getInstance())) {
                     float distance = hologram.getLocation().getDistance(player.getPosition());
                     if (distance <= radius) {
@@ -57,7 +57,7 @@ public class CommandNear implements CommandProcessor {
                 sender.sendMessage(ChatColor.BRIGHT_GREEN + "Holograms within " + radius + " blocks:");
                 for (Map.Entry<Hologram, Float> near : nearby.entrySet()) {
                     Hologram holo = near.getKey();
-                    sender.sendMessage(" - \"" + holo.getId() + "\" at " + TextUtil.locationAsString(holo.getLocation(), holo.getInstance()) + " (" + TextUtil.formatDouble(near.getValue()) + " blocks away)");
+                    sender.sendMessage(" - \"" + holo.getId() + "\" at " + TextUtil.locationAsString(holo.getLocation(), holo.getInstance()) + " (" + TextUtil.formatDouble(near.getValue()) + " blocks away)" + (!holo.isSpawned()?" §7§o(Hidden)":""));
                 }
             }
         }
