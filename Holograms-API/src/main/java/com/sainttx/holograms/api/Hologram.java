@@ -3,6 +3,7 @@ package com.sainttx.holograms.api;
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 
@@ -11,6 +12,7 @@ import com.sainttx.holograms.api.line.ItemLine;
 import com.sainttx.holograms.api.line.UpdatingHologramLine;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 
@@ -188,6 +190,22 @@ public class Hologram {
             y -= HologramLine.SPACE_BETWEEN_LINES;
             line.setLocation(lineLocation, instance);
         }
+    }
+    
+    public void addViewer(Player p) {
+    	getLines().forEach(line -> {
+    		line.getBukkitEntity().addViewer(p);
+    	});
+    }
+    
+    public void removeViewer(Player p) {
+    	getLines().forEach(line -> {
+    		line.getBukkitEntity().removeViewer(p);
+    	});
+    }
+    
+    public Set<Player> getViewers() {
+    	return getLine(0).getBukkitEntity().getViewers();
     }
 
     /**

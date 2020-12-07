@@ -6,6 +6,7 @@ import com.sainttx.holograms.api.entity.Nameable;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 
@@ -70,4 +71,9 @@ public class TextLine extends AbstractLine implements TextualHologramLine {
     public double getHeight() {
         return 0.23;
     }
+
+	@Override
+	public Entity getBukkitEntity() {
+		return nameable.getBukkitEntity();
+	}
 }

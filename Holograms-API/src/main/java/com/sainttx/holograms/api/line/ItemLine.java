@@ -14,6 +14,7 @@ import com.sainttx.holograms.api.entity.ItemHolder;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
@@ -201,4 +202,9 @@ public class ItemLine extends AbstractLine implements ItemCarryingHologramLine {
     public double getHeight() {
         return 0.5;
     }
+
+	@Override
+	public Entity getBukkitEntity() {
+		return entity.getBukkitEntity();
+	}
 }

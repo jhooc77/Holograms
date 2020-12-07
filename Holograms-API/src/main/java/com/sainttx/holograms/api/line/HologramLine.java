@@ -2,6 +2,7 @@ package com.sainttx.holograms.api.line;
 
 import com.sainttx.holograms.api.Hologram;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 
@@ -102,4 +103,6 @@ public interface HologramLine {
 	void setInstance(Instance instance);
 
 	Instance getInstance();
+	
+	Entity getBukkitEntity();
 }
