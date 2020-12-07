@@ -1,6 +1,6 @@
 {
   "entrypoint": "com.sainttx.holograms.api.HologramPlugin",
   "name": "HologramsMinestom",
-  "version": "1.3",
+  "version": "1.4",
   "author": "BabyMandarinDuck"
 }

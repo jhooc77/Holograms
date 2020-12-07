@@ -27,7 +27,7 @@ public class ManagerImpl implements HologramManager {
     private HologramPlugin plugin;
     private Configuration persistingHolograms;
     private StorageLocation storageLocation;
-    private Map<String, Hologram> activeHolograms = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, Hologram> Holograms = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     private Set<UpdatingHologramLine> trackedUpdatingLines = new HashSet<>();
 
     public ManagerImpl(HologramPlugin plugin) {
@@ -58,6 +58,7 @@ public class ManagerImpl implements HologramManager {
 
         // Load all the holograms
         if (storageLocation.get("holograms", String[].class) != null) {
+        	int i = 0;
             loadHolograms:
             for (String hologramName : storageLocation.get("holograms", String[].class)) {
                 List<String> uncoloredLines = Arrays.asList(storageLocation.get("holograms." + hologramName + ".lines", String[].class));
@@ -81,10 +82,14 @@ public class ManagerImpl implements HologramManager {
                         continue loadHolograms;
                     }
                 }
-                hologram.spawn();
-                addActiveHologram(hologram);
-                plugin.getLogger().info("Loaded hologram with \"" + hologram.getId() + "\" with " + hologram.getLines().size() + " lines");
+                if (storageLocation.get("holograms." + hologramName + ".hide", Boolean.class)) {
+                	i++;
+                } else {
+                	hologram.spawn();
+                }
+                addHologram(hologram);
             }
+        	plugin.getLogger().info("Loaded \"" + Holograms.size() + "\" holograms with \"" + i + "\" inactive holograms");
         } else {
             plugin.getLogger().info("holograms.yml file had no 'holograms' section defined, no holograms loaded");
         }
@@ -99,36 +104,37 @@ public class ManagerImpl implements HologramManager {
                 .collect(Collectors.toList());
         storageLocation.set("holograms." + hologramName + ".location", LocationUtil.locationAsString(hologram.getLocation(), hologram.getInstance()), String.class);
         storageLocation.set("holograms." + hologramName + ".lines", uncoloredLines.toArray(new String[uncoloredLines.size()]), String[].class);
-        storageLocation.set("holograms", activeHolograms.keySet().toArray(new String[activeHolograms.size()]), String[].class);
+        storageLocation.set("holograms." + hologramName + ".hide", !hologram.isSpawned(), Boolean.class);
+        storageLocation.set("holograms", Holograms.keySet().toArray(new String[Holograms.size()]), String[].class);
     }
 
     @Override
     public void deleteHologram(Hologram hologram) {
         hologram.despawn();
-        removeActiveHologram(hologram);
+        Holograms.remove(hologram.getId());
         storageLocation.delete("holograms." + hologram.getId() + ".location");
         storageLocation.delete("holograms." + hologram.getId() + ".lines");
-        storageLocation.set("holograms", activeHolograms.keySet().toArray(new String[activeHolograms.size()]), String[].class);
+        storageLocation.delete("holograms." + hologram.getId() + ".hide");
+        storageLocation.set("holograms", Holograms.keySet().toArray(new String[Holograms.size()]), String[].class);
     }
 
     @Override
     public Hologram getHologram(String name) {
-        return activeHolograms.get(name);
+        return Holograms.get(name);
     }
 
     @Override
     public Map<String, Hologram> getActiveHolograms() {
+    	Map<String, Hologram> activeHolograms = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    	Holograms.forEach((t, h) -> {
+    		if (h.isSpawned()) activeHolograms.put(t, h);
+    	});
         return activeHolograms;
     }
 
     @Override
-    public void addActiveHologram(Hologram hologram) {
-        activeHolograms.put(hologram.getId(), hologram);
-    }
-
-    @Override
-    public void removeActiveHologram(Hologram hologram) {
-        activeHolograms.remove(hologram.getId());
+    public void addHologram(Hologram hologram) {
+        Holograms.put(hologram.getId(), hologram);
     }
 
     @Override
@@ -151,4 +157,9 @@ public class ManagerImpl implements HologramManager {
         getActiveHolograms().values().forEach(Hologram::despawn);
         getActiveHolograms().clear();
     }
+
+	@Override
+	public Map<String, Hologram> getHolograms() {
+		return Holograms;
+	}
 }

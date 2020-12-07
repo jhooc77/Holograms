@@ -37,25 +37,20 @@ public interface HologramManager {
      * @return all holograms
      */
     Map<String, Hologram> getActiveHolograms();
+    
+    Map<String, Hologram> getHolograms();
 
     /**
      * Registers a {@link Hologram} to the manager. If the user wishes for
      * the hologram to have persistence, then the {@link #saveHologram(Hologram)} method
      * should be called.
      * <p>
-     * The hologram will be available in {@link #getActiveHolograms()} after
+     * The hologram will be available in {@link #getHolograms()} after
      * calling this method.
      *
      * @param hologram the hologram
      */
-    void addActiveHologram(Hologram hologram);
-
-    /**
-     * Unregisters a {@link Hologram} from the map of active holograms.
-     *
-     * @param hologram the hologram
-     */
-    void removeActiveHologram(Hologram hologram);
+    void addHologram(Hologram hologram);
 
     /**
      * Tracks an updating hologram line for execution of

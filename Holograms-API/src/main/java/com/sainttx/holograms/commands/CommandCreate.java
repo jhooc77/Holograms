@@ -5,11 +5,13 @@ import com.sainttx.holograms.api.HologramPlugin;
 import com.sainttx.holograms.api.line.HologramLine;
 import com.sainttx.holograms.util.TextUtil;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.time.TimeUnit;
 
 public class CommandCreate implements CommandProcessor {
 
@@ -43,9 +45,19 @@ public class CommandCreate implements CommandProcessor {
                     return true;
                 }
                 holo.spawn();
-                plugin.getHologramManager().addActiveHologram(holo);
+                plugin.getHologramManager().addHologram(holo);
                 plugin.getHologramManager().saveHologram(holo);
                 sender.sendMessage(ChatColor.BRIGHT_GREEN + "Created hologram " + holo.getId() + " with line \"" + text.getMessage() + ChatColor.BRIGHT_GREEN + "\"");
+                
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                	holo.despawn();
+                	plugin.getLogger().info("despawned");
+                }).delay(5L, TimeUnit.SECOND).schedule();
+
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                	holo.spawn();
+                	plugin.getLogger().info("respawned");
+                }).delay(10L, TimeUnit.SECOND).schedule();
             }
         }
 

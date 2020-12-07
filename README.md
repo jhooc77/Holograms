@@ -29,8 +29,8 @@ Once you have the manager reference, you can easily work your way around the API
 
 ```java
 public void createHologram(String id, Position location, Instance instance) {
-    Hologram hologram = new Hologram(id, location);
-    hologramManager.addActiveHologram(hologram); // Tells the plugin a new Hologram was added
+    Hologram hologram = new Hologram(id, location, instance);
+    hologramManager.addHologram(hologram); // Tells the plugin a new Hologram was added
 }
 ```
 
@@ -58,12 +58,19 @@ public void deleteHologram(Hologram hologram) {
 }
 ```
 
-Or if you want to temporarily hide a persistent hologram until the server restarts:
+Or if you want to hide a persistent hologram:
 
 ```java
 public void hideHologram(Hologram hologram) {
     hologram.despawn();
-    hologramManager.removeActiveHologram(hologram);
+}
+```
+
+And you can show hologram again:
+
+```java
+public void showHologram(Hologram hologram) {
+    hologram.spawn();
 }
 ```
 
