@@ -96,7 +96,7 @@ public class Hologram {
      * @return the holograms location
      */
     public Position getLocation() {
-        return this.location.copy();
+        return this.location.clone();
     }
 
     /**
@@ -237,7 +237,7 @@ public class Hologram {
      */
     public void teleport(Position location) {
         if (!this.location.equals(location)) {
-            this.location = location.copy();
+            this.location = location.clone();
             save();
             if (isSpawned()) {
                 spawn();
@@ -246,7 +246,7 @@ public class Hologram {
     }
     public void teleport(Position location, Instance instance) {
         if (!this.location.equals(location)) {
-            this.location = location.copy();
+            this.location = location.clone();
             this.instance = instance;
             save();
             if (isSpawned()) {

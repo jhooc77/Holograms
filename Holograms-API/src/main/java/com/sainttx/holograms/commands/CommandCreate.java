@@ -34,7 +34,7 @@ public class CommandCreate implements CommandProcessor {
             } else {
                 Player player = (Player) sender;
                 ColoredText text = TextUtil.implode(2, args);
-                Hologram holo = new Hologram(hologramName, player.getPosition().copy().add(0, 1, 0), true, player.getInstance());
+                Hologram holo = new Hologram(hologramName, player.getPosition().clone().add(0, 1, 0), true, player.getInstance());
                 try {
                     HologramLine line = plugin.parseLine(holo, text.getMessage());
                     holo.addLine(line);

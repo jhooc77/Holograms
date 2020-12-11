@@ -30,13 +30,13 @@ public abstract class AbstractLine implements HologramLine {
 
     @Override
     public void setLocation(Position location, Instance instance) {
-        this.location = location.copy();
+        this.location = location.clone();
         this.instance = instance;
     }
 
     @Override
     public Position getLocation() {
-        return location.copy();
+        return location.clone();
     }
 
     @Override

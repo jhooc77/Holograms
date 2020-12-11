@@ -31,7 +31,7 @@ public class CommandMoveHere implements CommandProcessor {
             } else {
                 Player player = (Player) sender;
                 hologram.despawn();
-                hologram.teleport(player.getPosition().copy().add(0, 1, 0), player.getInstance());
+                hologram.teleport(player.getPosition().clone().add(0, 1, 0), player.getInstance());
                 hologram.spawn();
                 plugin.getHologramManager().saveHologram(hologram);
                 sender.sendMessage(ChatColor.BRIGHT_GREEN + "Moved " + hologramName + " to your current location");
