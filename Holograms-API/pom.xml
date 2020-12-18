@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.github.Minestom</groupId>
             <artifactId>Minestom</artifactId>
-            <version>62ab0a2007</version>
+            <version>c7876d648c</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
